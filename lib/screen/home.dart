@@ -3,7 +3,7 @@ import 'package:flutter_application_1/screen/login.dart';
 import 'package:flutter_application_1/widget/widget_support.dart';
 import 'inventory_screen.dart';
 import 'daily_check_screen.dart';
-import 'daily_month_screen.dart';
+import 'profile_screen.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -13,8 +13,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  bool inventory = false, dailyCheck = false, dailyMonth = false;
-  Color inventoryColor = Colors.white, dailyCheckColor = Colors.white, dailyMonthColor = Colors.white;
+  bool inventory = false, dailyCheck = false, profile = false;
+  Color inventoryColor = Colors.white, dailyCheckColor = Colors.white, profileColor = Colors.white;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,7 @@ class _HomeState extends State<Home> {
                     setState(() {
                       inventory = true;
                       dailyCheck = false;
-                      dailyMonth = false;
+                      profile = false;
                       // inventoryColor = Colors.brown.shade300;
                     });
                   },
@@ -94,7 +94,7 @@ class _HomeState extends State<Home> {
                     setState(() {
                       inventory = false;
                       dailyCheck = true;
-                      dailyMonth = false;
+                      profile = false;
                       // dailyCheckColor = Colors.brown.shade300;
                     });
                   },
@@ -120,18 +120,18 @@ class _HomeState extends State<Home> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => DailyMonthScreen()),
+                      MaterialPageRoute(builder: (context) => Profile()),
                     );
                     setState(() {
                       inventory = false;
                       dailyCheck = false;
-                      dailyMonth = true;
+                      profile = true;
                       // dailyMonthColor = Colors.brown.shade300;
                     });
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: dailyMonthColor,
+                      color: profileColor,
                       border: Border.all(color: Colors.black),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
@@ -139,9 +139,9 @@ class _HomeState extends State<Home> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.calendar_today_rounded, size: 20.0, color: Colors.black,),
+                        Icon(Icons.person_outline, size: 20.0, color: Colors.black,),
                         SizedBox(width: 8.0),
-                        Text('Daily Month', style: AppWidget.boldTextFieildStyle(),)
+                        Text('Account', style: AppWidget.boldTextFieildStyle(),)
                       ],
                     ),
                   ),
