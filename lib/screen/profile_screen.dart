@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/screen/login.dart';
+import 'package:flutter_application_1/widget/widget_support.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -75,7 +76,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text('Profile', style: AppWidget.boldTextFieildStyle(),),
       ),
       body: SingleChildScrollView(
         child: Container(

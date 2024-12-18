@@ -11,8 +11,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'screen/daily_check_screen.dart';
 // import 'screen/daily_month_screen.dart';
 
-Future<void> main() async{
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await dotenv.load(fileName: ".env");
 
   if (kIsWeb) {
@@ -41,6 +42,8 @@ Future<void> main() async{
 
   runApp(MyApp());
 }
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
