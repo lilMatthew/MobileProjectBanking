@@ -213,7 +213,7 @@ class _DailyCheckScreenState extends State<DailyCheckScreen> {
     setState(() {
       _inventoryItems = querySnapshot.docs
           .map((doc) => {
-                'id': doc.id,
+                'Id': doc.id,
                 ...doc.data() as Map<String, dynamic>
               })
           .toList();

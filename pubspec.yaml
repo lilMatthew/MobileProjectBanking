@@ -85,6 +85,8 @@ flutter:
   assets:
     - images/logo.png
     - images/profile.jpg
+    - images/xofa_bg.jpg
+    - images/user_profile_logo.png
     - images/animation/Animation - 1730959159682.json
     - images/animation/Animation - 1734541937476.json
     - .env
