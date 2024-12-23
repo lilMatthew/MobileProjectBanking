@@ -178,6 +178,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Xofá Coffee',
           style: TextStyle(
@@ -206,7 +207,7 @@ class _HomeState extends State<Home> {
             child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.grey[400]!, Colors.white!],
+                  colors: [Colors.grey[400]!, Colors.white],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomLeft,
                 ),
@@ -313,7 +314,7 @@ class _HomeState extends State<Home> {
                   ),
                   SizedBox(height: 40.0), 
                   Text(
-                    'Welcome to the Xofá Coffee!',
+                    'Connect with Xofá Coffee',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 18.0,

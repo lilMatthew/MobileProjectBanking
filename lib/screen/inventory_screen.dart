@@ -287,18 +287,18 @@ class _InventoryScreenState extends State<InventoryScreen> {
     );
   }
 
-  Future<void> _showOptionsDialog(String id, int currentQuantity) async {
+   Future<void> _showOptionsDialog(String id, int currentQuantity) async {
     await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: Text('Options'),
-          content: Text('Choose an action'),
+          content: Text('What would you like to do?'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                _updateQuantity(id, currentQuantity);
+                _showUpdateQuantityDialog(id, currentQuantity);
               },
               child: Text('Update Quantity'),
             ),
@@ -315,48 +315,69 @@ class _InventoryScreenState extends State<InventoryScreen> {
     );
   }
 
-  Future<void> _updateQuantity(String id, int currentQuantity) async {
+  Future<void> _showUpdateQuantityDialog(String id, int currentQuantity) async {
     TextEditingController quantityController = TextEditingController();
-    quantityController.text = currentQuantity.toString();
 
     await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: Text('Update Quantity'),
-          content: TextField(
-            controller: quantityController,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(labelText: 'Quantity'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: quantityController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(labelText: 'Quantity'),
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        _updateQuantity(id, currentQuantity, int.parse(quantityController.text), true);
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Receive'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        _updateQuantity(id, currentQuantity, int.parse(quantityController.text), false);
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('Transfer'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text('Cancel'),
             ),
-            TextButton(
-              onPressed: () async {
-                int newQuantity = int.parse(quantityController.text);
-                try {
-                  DocumentSnapshot doc = await _inventoryCollection.doc(id).get();
-                  if (doc.exists) {
-                    await _inventoryCollection.doc(id).update({'Quantity': newQuantity});
-                    Navigator.of(context).pop();
-                  } else {
-                    print('Document does not exist');
-                    Navigator.of(context).pop();
-                  }
-                } catch (e) {
-                  print('Error updating document: $e');
-                  Navigator.of(context).pop();
-                }
-              },
-              child: Text('Update'),
-            ),
           ],
         );
       },
     );
+  }
+
+  Future<void> _updateQuantity(String id, int currentQuantity, int inputQuantity, bool isReceive) async {
+    int newQuantity = isReceive ? currentQuantity + inputQuantity : currentQuantity - inputQuantity;
+    try {
+      DocumentSnapshot doc = await _inventoryCollection.doc(id).get();
+      if (doc.exists) {
+        await _inventoryCollection.doc(id).update({'Quantity': newQuantity});
+      } else {
+        print('Document does not exist');
+      }
+    } catch (e) {
+      print('Error updating document: $e');
+    }
   }
 
   Future<void> _deleteItem(String id) async {

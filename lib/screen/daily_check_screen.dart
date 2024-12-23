@@ -179,13 +179,9 @@
 // }
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:googleapis_auth/auth_io.dart';
-import 'package:googleapis/gmail/v1.dart' as gmail;
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:csv/csv.dart';
-import 'dart:convert';
 
 class DailyCheckScreen extends StatefulWidget {
   const DailyCheckScreen({super.key});
@@ -212,79 +208,50 @@ class _DailyCheckScreenState extends State<DailyCheckScreen> {
 
     setState(() {
       _inventoryItems = querySnapshot.docs
-          .map((doc) => {
-                'Id': doc.id,
-                ...doc.data() as Map<String, dynamic>
-              })
+          .map((doc) => {'Id': doc.id, ...doc.data() as Map<String, dynamic>})
+          // .where((item) => item['Quantity'] > 0) -- nếu muốn tệp chỉ gửi số lượng item > 0 thì uncomment
           .toList();
+      _inventoryItems.sort((a, b) => a['Id'].compareTo(b['Id']));
     });
   }
 
-  Future<void> exportToCSVAndSendEmail() async {
+  Future<void> exportToCSV() async {
+    if (_inventoryItems.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('No data available to export')),
+      );
+      return;
+    }
+
     List<List<dynamic>> rows = [
       ["Name", "Id", "Quantity"]
     ];
 
     for (var item in _inventoryItems) {
-      rows.add([
-        item['Name'],
-        item['Id'],
-        item['Quantity']
-      ]);
+      rows.add([item['Name'], item['Id'], item['Quantity']]);
     }
 
     String csv = const ListToCsvConverter().convert(rows);
-    final directory = await getApplicationDocumentsDirectory();
-    final path = "${directory.path}/daily_check.csv";
+    final directory = await getExternalStorageDirectory();
+    final path = "${directory!.path}/DailyCheckXofa/daily_check.csv";
+    final directoryPath = Directory("${directory.path}/DailyCheckXofa");
+    if (!await directoryPath.exists()) {
+      await directoryPath.create(recursive: true);
+    }
     final file = File(path);
     await file.writeAsString(csv);
 
-    // Lấy email của người dùng hiện tại từ Firebase Authentication
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      String email = user.email!;
-
-      // Cấu hình OAuth 2.0
-      final clientId = ClientId('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET');
-      final scopes = [gmail.GmailApi.gmailSendScope];
-      await clientViaUserConsent(clientId, scopes, (url) {
-        // Mở URL trong trình duyệt để người dùng xác thực
-        print('Please go to the following URL and grant access:');
-        print('  => $url');
-        print('');
-      }).then((AuthClient client) async {
-        final gmailApi = gmail.GmailApi(client);
-
-        // Tạo email
-        var emailMessage = gmail.Message()
-          ..raw = base64UrlEncode(utf8.encode(
-              'Content-Type: text/plain; charset="UTF-8"\n'
-              'MIME-Version: 1.0\n'
-              'Content-Transfer-Encoding: 7bit\n'
-              'to: $email\n'
-              'subject: Daily Check CSV\n\n'
-              'Please find the attached CSV file for the daily check.\n\n'
-              'Attachment: ${file.path}'));
-
-        try {
-          await gmailApi.users.messages.send(emailMessage, 'me');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('CSV sent to $email')),
-          );
-        } catch (e) {
-          print('Failed to send email: $e');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to send CSV')),
-          );
-        }
-      });
-    }
+    // Hiển thị thông báo khi lưu thành công
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('CSV saved to $path')),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Daily Check Screen',
           style: TextStyle(
@@ -298,7 +265,7 @@ class _DailyCheckScreenState extends State<DailyCheckScreen> {
         actions: [
           IconButton(
             icon: Icon(Icons.download, color: Colors.white),
-            onPressed: exportToCSVAndSendEmail,
+            onPressed: exportToCSV,
           ),
         ],
       ),
