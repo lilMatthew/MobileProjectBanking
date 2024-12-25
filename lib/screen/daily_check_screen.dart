@@ -112,16 +112,8 @@ class _DailyCheckScreenState extends State<DailyCheckScreen> {
                       return Container(
                         margin: EdgeInsets.symmetric(vertical: 8.0),
                         decoration: BoxDecoration(
-                          color: Colors.white, //them withOpacity(0.8) neu muon mo
+                          color: Colors.white.withOpacity(0.9), //them withOpacity(0.8) neu muon mo
                           borderRadius: BorderRadius.circular(20.0),
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //     color: Colors.grey.withOpacity(0.5),
-                          //     spreadRadius: 2,
-                          //     blurRadius: 5,
-                          //     offset: Offset(0, 3),
-                          //   ),
-                          // ],
                         ),
                         child: ListTile(
                           title: Text(

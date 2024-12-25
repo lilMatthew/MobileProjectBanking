@@ -8,7 +8,6 @@ import 'daily_check_screen.dart';
 import 'profile_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -48,63 +47,22 @@ class _HomeState extends State<Home> {
       //     ),
       //   ],
       // ),
-      body: Stack(
-        children: [
-          // Ảnh nền
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("images/xf_bangTin2.jpg"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          // Header tùy chỉnh
-          Positioned(
-            top: 20,
-            left: 0,
-            right: 0,
-            child: AppBar(
-              automaticallyImplyLeading: false,
-              title: Container(
-                padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            // Ảnh nền
+            Positioned.fill(
+              child: Container(
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 196, 178, 170),
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(90.0),
-                    bottomRight: Radius.circular(10.0),
-                  ),
-                ),
-                child: Text(
-                  'Xofá Coffee Home',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                  image: DecorationImage(
+                    image: AssetImage("images/xf_bangTin2.jpg"),
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              actions: [
-                IconButton(
-                  icon: Icon(Icons.logout, color: Colors.black),
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => Login()),
-                    );
-                  },
-                ),
-              ],
             ),
-          ),
-          // Nội dung chính
-          Positioned.fill(
-            child: Padding(
+            // Nội dung chính
+            Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -123,7 +81,7 @@ class _HomeState extends State<Home> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                       ),
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white,
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Row(
@@ -151,7 +109,7 @@ class _HomeState extends State<Home> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                       ),
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white,
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Row(
@@ -168,13 +126,18 @@ class _HomeState extends State<Home> {
                   SizedBox(height: 20.0),
                   // Profile Button
                   GestureDetector(
-                    
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Profile()),
+                      );
+                    },
                     child: Card(
                       elevation: 5,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                       ),
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white,
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Row(
@@ -226,14 +189,13 @@ class _HomeState extends State<Home> {
                           textStyle: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16.0,
-                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
-                      SizedBox(height: 20.0),
+                      SizedBox(height: 10.0),
                       ElevatedButton(
                         onPressed: () async {
-                          const instagramUrl = 'https://www.instagram.com/xofacafe';
+                          const instagramUrl = 'https://www.instagram.com/xofacoffee/';
                           if (await canLaunchUrl(Uri.parse(instagramUrl))) {
                             await launchUrl(Uri.parse(instagramUrl));
                           } else {
@@ -255,7 +217,6 @@ class _HomeState extends State<Home> {
                           textStyle: TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 16.0,
-                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
@@ -264,15 +225,15 @@ class _HomeState extends State<Home> {
                 ],
               ),
             ),
-          ),
-          if (showAnimation)
-            Center(
-              child: Container(
-                color: Colors.black.withOpacity(0.5),
-                child: CircularProgressIndicator(), // Hoặc thay bằng Lottie nếu muốn
-              ),
-            ),
-        ],
+          // if (showAnimation)
+          //   Center(
+          //     child: Container(
+          //       color: Colors.black.withOpacity(0.5),
+          //       child: CircularProgressIndicator(), // Hoặc thay bằng Lottie nếu muốn
+          //     ),
+          //   ),
+          ],
+        ),
       ),
     );
   }
