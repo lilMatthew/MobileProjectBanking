@@ -17,8 +17,116 @@ class _InventoryScreenState extends State<InventoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: Stack(
+        children: [
+          // Ảnh nền
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("images/xf_bangTin2.jpg"), // Đường dẫn tới ảnh nền
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+          // Header tùy chỉnh
+          Positioned(
+            top: 20,
+            left: 0,
+            right: 0,
+            child: AppBar(
+              automaticallyImplyLeading: false,
+              title: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 196, 178, 170),
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(90.0),
+                    bottomRight: Radius.circular(10.0),
+                  ),
+                ),
+                child: Text(
+                  'Inventory Screen',
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+            ),
+          ),
+          // Nội dung chính
+          Positioned.fill(
+            top: 100.0, // Đẩy nội dung xuống dưới header
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: _inventoryCollection.orderBy("Id").snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  final items = snapshot.data!.docs;
+
+                  return ListView.builder(
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      final item = items[index];
+                      final data = item.data() as Map<String, dynamic>;
+
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 8.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.8),
+                          borderRadius: BorderRadius.circular(15.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            data['Name'],
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          subtitle: Text('Code: ${data['Id']}'),
+                          trailing: Text(
+                            'Quantity: ${data['Quantity']}',
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          onTap: () => _showOptionsDialog(item.id, data['Quantity']),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
       floatingActionButton: Opacity(
-        opacity: 0.5,
+        opacity: 0.8,
         child: FloatingActionButton(
           onPressed: () {
             Navigator.push(
@@ -28,84 +136,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      appBar: AppBar(
-        title: Text(
-          'Inventory Screen',
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 18.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: Colors.grey[800],
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.grey[400]!, Colors.white!],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        padding: EdgeInsets.all(20.0),
-        child: StreamBuilder<QuerySnapshot>(
-          stream: _inventoryCollection.orderBy("Id").snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-
-            final items = snapshot.data!.docs;
-
-            return ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                final item = items[index];
-                final data = item.data() as Map<String, dynamic>;
-
-                return Container(
-                  margin: EdgeInsets.symmetric(vertical: 8.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: ListTile(
-                    title: Text(
-                      data['Name'],
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    subtitle: Text('Code: ${data['Id']}'),
-                    trailing: Text(
-                      'Quantity: ${data['Quantity']}',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 15.0,
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
-                    onTap: () => _showOptionsDialog(item.id, data['Quantity']),
-                  ),
-                );
-              },
-            );
-          },
-        ),
-      ),
     );
   }
 
