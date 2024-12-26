@@ -2,6 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'items.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'inventory_search_delegate.dart';
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
@@ -58,6 +61,18 @@ class _InventoryScreenState extends State<InventoryScreen> {
               ),
               backgroundColor: Colors.transparent,
               elevation: 0,
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    // Xử lý sự kiện tìm kiếm ở đây
+                    showSearch(
+                      context: context,
+                      delegate: InventorySearchDelegate(_inventoryCollection),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
           // Nội dung chính

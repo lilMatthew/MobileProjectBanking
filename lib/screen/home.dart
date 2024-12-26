@@ -23,30 +23,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   automaticallyImplyLeading: false,
-      //   title: Text(
-      //     'Xofá Coffee',
-      //     style: TextStyle(
-      //       fontFamily: 'Poppins',
-      //       fontSize: 18.0,
-      //       fontWeight: FontWeight.bold,
-      //       color: Colors.white,
-      //     ),
-      //   ),
-      //   backgroundColor: Colors.grey[800],
-      //   actions: [
-      //     IconButton(
-      //       icon: Icon(Icons.logout, color: Colors.white),
-      //       onPressed: () {
-      //         Navigator.pushReplacement(
-      //           context,
-      //           MaterialPageRoute(builder: (context) => Login()),
-      //         );
-      //       },
-      //     ),
-      //   ],
-      // ),
       body: SingleChildScrollView(
         child: Stack(
           children: [

@@ -5,8 +5,7 @@ import 'package:flutter_application_1/screen/bottomnav.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_application_1/screen/splash_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 // import 'screen/inventory_screen.dart';
 // import 'screen/daily_check_screen.dart';
@@ -41,10 +40,10 @@ Future<void> main() async {
     await Firebase.initializeApp();
   }
 
-  await FirebaseAppCheck.instance.activate(
-    webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
-    androidProvider: AndroidProvider.debug,
-  );
+  // await FirebaseAppCheck.instance.activate(
+  //   webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
+  //   androidProvider: AndroidProvider.debug,
+  // );
   runApp(MyApp());
 }
 
