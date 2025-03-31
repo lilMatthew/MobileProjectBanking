@@ -11,9 +11,9 @@
 | Họ và tên              | Mã sinh viên | 🔗 Link to GitHub profile                         |
 | ---------------------- | ------------ | ------------------------------------------------- |
 | Nguyễn Hải Sơn         | 24A4042603   | [lilMatthew](https://github.com/lilMatthew)       |
-| Bùi Phương Linh        | 25A4041557   |                                                   |
-| Lê Phương Linh         | 25A4041893   |                                                   |
-| Đàm Thị Huyền Trang    | 25A4041962   |                                                   |
+| Đỗ Việt Thành          |              |                                                   |
+| Nguyễn Hữu Thắng       |              |                                                   |
+| Đinh Hải Anh           |              |                                                   |
 
 ### 🚀 Giới thiệu tên gọi
 
